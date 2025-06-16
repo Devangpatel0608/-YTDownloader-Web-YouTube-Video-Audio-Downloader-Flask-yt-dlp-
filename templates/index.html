@@ -1,0 +1,50 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>YouTube Downloader</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+</head>
+<body>
+    <div class="container">
+        <h1>🎬 YouTube Video Downloader</h1>
+
+        {% if error %}
+            <p class="error">{{ error }}</p>
+        {% endif %}
+        {% if success %}
+            <p class="success">{{ success }}</p>
+        {% endif %}
+
+        <form method="POST" action="{{ url_for('fetch') }}">
+            <input type="text" name="url" placeholder="Enter YouTube URL" required value="{{ url or '' }}">
+            <button type="submit">🔍 Fetch Info</button>
+        </form>
+
+        {% if title %}
+            <div class="video-info">
+                <h2>{{ title }}</h2>
+                {% if thumbnail %}
+                    <img src="{{ thumbnail }}" alt="Thumbnail" class="thumbnail">
+                {% endif %}
+            </div>
+
+            <form method="POST" action="/">
+                <input type="hidden" name="url" value="{{ url }}">
+                <label for="resolution">Select Resolution:</label>
+                <select name="resolution" id="resolution">
+                    {% for res in resolutions %}
+                        <option value="{{ res }}">{{ res }}p</option>
+                    {% endfor %}
+                </select>
+                <label for="format">OR Select Format:</label>
+                <select name="format" id="format">
+                    <option value="">MP4</option>
+                    <option value="mp3">MP3 (Audio Only)</option>
+                </select>
+                <button type="submit">⬇️ Download</button>
+            </form>
+        {% endif %}
+    </div>
+</body>
+</html>
